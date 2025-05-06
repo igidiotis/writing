@@ -313,6 +313,19 @@ function MainApp() {
   
   return (
     <div className="min-h-screen bg-background py-12 px-4">
+      {/* Credit Button */}
+      <a 
+        href="https://www.kth.se/profile/gidiotis" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed top-4 right-4 z-50 px-4 py-2 text-sm font-medium text-white rounded-full 
+                 bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80
+                 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105
+                 sm:text-xs sm:py-1.5 sm:px-3"
+      >
+        Created by Iosif Gidiotis
+      </a>
+      
       <header className="w-full max-w-3xl mx-auto mb-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Future Scenario Writer</h1>
         <p className="text-muted-foreground mt-2">
