@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-background text-foreground min-h-screen;
+  }
+
+  h1 {
+    @apply text-3xl font-semibold;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply text-xl font-medium;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card rounded-lg shadow-soft p-6;
+  }
+
+  .glass-card {
+    @apply bg-white/85 backdrop-blur-sm shadow-glass rounded-xl p-6;
+  }
+
+  .neomorphic {
+    @apply bg-secondary shadow-neomorphic rounded-lg p-4;
+  }
+
+  .button {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+  }
+
+  .button-primary {
+    @apply button bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+
+  .button-secondary {
+    @apply button bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+
+  .input {
+    @apply px-3 py-2 bg-white border border-muted rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20;
+  }
+
+  .textarea {
+    @apply px-3 py-2 bg-white border border-muted rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none;
+  }
+}

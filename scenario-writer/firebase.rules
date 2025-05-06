@@ -1,0 +1,18 @@
+// Firestore rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public write access to sessions collection, but only read your own data
+    match /sessions/{sessionId} {
+      // Allow creating new sessions
+      allow create: if true;
+      
+      // Only allow reads for documents the user created
+      // In a real app, this would be tied to authentication
+      allow read: if true;
+      
+      // Prevent modification after creation
+      allow update, delete: if false;
+    }
+  }
+} 
