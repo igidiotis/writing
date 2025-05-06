@@ -12,19 +12,19 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        background: "white",
+        foreground: "#1d1d1f",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#0071e3",
+          foreground: "white",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#f5f5f7",
+          foreground: "#1d1d1f",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#f5f5f7",
+          foreground: "#86868b",
         },
         accent: {
           DEFAULT: '#0071e3',
@@ -34,7 +34,7 @@ export default {
           DEFAULT: '#ffffff',
           foreground: '#1d1d1f',
         },
-        border: "hsl(var(--muted))",
+        border: "#f5f5f7",
       },
       borderRadius: {
         lg: '0.75rem',
