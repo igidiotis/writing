@@ -105,6 +105,15 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
       transition={{ duration: 0.5 }}
       className="w-full max-w-3xl mx-auto"
     >
+      <div className="mb-3 text-center">
+        <button 
+          onClick={() => setConsentOpen(true)}
+          className="text-sm text-primary hover:text-primary/80 hover:underline transition-colors"
+        >
+          Read more about consenting to participate in this research project
+        </button>
+      </div>
+      
       <Card variant="glass" className="backdrop-blur-md">
         <CardContent>
           <div className="flex justify-between items-center mb-3">
@@ -112,15 +121,6 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
             <div className="text-sm text-muted-foreground">
               {wordCount} {wordCount === 1 ? 'word' : 'words'}
             </div>
-          </div>
-          
-          <div className="mb-4 text-center">
-            <button 
-              onClick={() => setConsentOpen(true)}
-              className="text-sm text-primary hover:text-primary/80 hover:underline transition-colors"
-            >
-              Read more about consenting to participate in this research project
-            </button>
           </div>
           
           <Textarea
