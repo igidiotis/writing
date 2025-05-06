@@ -34,6 +34,7 @@ export default {
           DEFAULT: '#ffffff',
           foreground: '#1d1d1f',
         },
+        border: "hsl(var(--muted))",
       },
       borderRadius: {
         lg: '0.75rem',
