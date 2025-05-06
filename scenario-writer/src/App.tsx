@@ -247,7 +247,6 @@ function MainApp() {
         <SubmissionForm 
           onSubmit={handleFormSubmit} 
           onCancel={handleCancelSubmit}
-          prompts={rules.map(rule => ({ id: rule.id, content: rule.content }))}
         />
       );
     }

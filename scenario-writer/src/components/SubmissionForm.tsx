@@ -18,10 +18,9 @@ type FormValues = z.infer<typeof formSchema>;
 interface SubmissionFormProps {
   onSubmit: (data: FormValues) => void;
   onCancel: () => void;
-  prompts?: Array<{id: string, content: string}>;
 }
 
-export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionFormProps) {
+export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
   const formStartTime = useRef(Date.now());
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
