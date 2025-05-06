@@ -34,7 +34,6 @@ const App: React.FC = () => {
       <SubmissionForm 
         onSubmit={handleFormSubmit} 
         onCancel={handleCancelSubmit}
-        prompts={rules.map(rule => ({ id: rule.id, content: rule.content }))}
       />
     );
   }
