@@ -89,12 +89,24 @@ function MainApp() {
   const { showToast } = useToast();
   const [sessionId] = useState(() => uuidv4());
   const startTimeRef = useRef<number>(Date.now());
-  const [content, setContent] = useState<string>("");
+  const [content, setContent] = useState<string>(() => {
+    // Initialize content from localStorage if it exists
+    const savedDraft = localStorage.getItem(`draft_${sessionId}`);
+    return savedDraft || "";
+  });
   const [wordCount, setWordCount] = useState<number>(0);
   const [rules, setRules] = useState<Rule[]>(INITIAL_RULES);
   const [events, setEvents] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
+  
+  // Calculate initial word count from saved content
+  useEffect(() => {
+    if (content) {
+      const words = content.trim() ? content.trim().split(/\s+/).length : 0;
+      setWordCount(words);
+    }
+  }, []);
   
   // Handle auto-save
   useEffect(() => {
@@ -164,6 +176,10 @@ function MainApp() {
       return;
     }
     
+    // Save current content to localStorage before switching to submission form
+    const key = `draft_${sessionId}`;
+    localStorage.setItem(key, content);
+    
     setIsSubmitting(true);
   };
   
@@ -212,9 +228,14 @@ function MainApp() {
   
   // Cancel submission and go back to writing
   const handleCancelSubmit = () => {
-    // Save content to localStorage before canceling to ensure it's not lost
+    // Retrieve the content from localStorage before setting isSubmitting to false
     const key = `draft_${sessionId}`;
-    localStorage.setItem(key, content);
+    const savedContent = localStorage.getItem(key);
+    
+    // Only update content if there's something saved in localStorage
+    if (savedContent) {
+      setContent(savedContent);
+    }
     
     setIsSubmitting(false);
   };
