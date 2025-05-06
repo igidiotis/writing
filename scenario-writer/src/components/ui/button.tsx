@@ -1,39 +1,33 @@
-import { cn } from "../../lib/utils";
 import { forwardRef } from "react";
-import type { ButtonHTMLAttributes } from "react";
+import { cn } from "../../lib/utils";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost";
-  size?: "sm" | "md" | "lg";
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'primary' | 'secondary' | 'outline';
+  size?: 'default' | 'sm' | 'lg';
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "primary", size = "md", children, ...props }, ref) => {
-    const variantClasses = {
-      primary: "button-primary",
-      secondary: "button-secondary",
-      ghost: "text-foreground hover:bg-secondary/60",
-    };
-
-    const sizeClasses = {
-      sm: "text-sm px-3 py-1",
-      md: "px-4 py-2",
-      lg: "text-lg px-5 py-3",
-    };
-
+  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
     return (
       <button
         className={cn(
-          "button",
-          variantClasses[variant],
-          sizeClasses[size],
+          "inline-flex items-center justify-center rounded-md font-medium transition-colors",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          "disabled:pointer-events-none disabled:opacity-50",
+          {
+            'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
+            'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+            'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
+            'bg-background text-foreground hover:bg-accent hover:text-accent-foreground': variant === 'default',
+            'h-9 px-4 py-2': size === 'default',
+            'h-8 px-3 text-sm': size === 'sm',
+            'h-11 px-8': size === 'lg',
+          },
           className
         )}
         ref={ref}
         {...props}
-      >
-        {children}
-      </button>
+      />
     );
   }
 );

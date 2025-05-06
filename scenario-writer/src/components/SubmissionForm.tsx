@@ -33,7 +33,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
   const onFormSubmit = (data: FormValues) => {
     // Add timing data
-    const timeSpentMs = Date.now() - formStartTime.current;
+    const _timeSpentMs = Date.now() - formStartTime.current;
     onSubmit({
       ...data,
       // Attach any additional metadata about form completion timing if needed

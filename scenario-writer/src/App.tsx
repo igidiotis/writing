@@ -158,13 +158,13 @@ function MainApp() {
     
     // Save to Firestore
     saveSession(session)
-      .then((docId) => {
+      .then((_docId) => {
         showToast("Your scenario has been successfully submitted!", "success");
         setIsComplete(true);
         // Optional: Clear the draft from localStorage
         localStorage.removeItem(`draft_${sessionId}`);
       })
-      .catch((error) => {
+      .catch((_error) => {
         showToast("Error saving to cloud. Backed up locally.", "error");
         // Save locally as fallback
         saveSessionToLocalStorage(session);

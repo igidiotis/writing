@@ -83,7 +83,7 @@ export function Editor({ onContentChange, onTrackEvent }: EditorProps) {
     trackEvent('paste', { content: pastedText });
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (_e: KeyboardEvent<HTMLTextAreaElement>) => {
     // Add additional tracking if needed
   };
 
