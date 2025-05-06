@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useRef } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -17,9 +18,10 @@ type FormValues = z.infer<typeof formSchema>;
 interface SubmissionFormProps {
   onSubmit: (data: FormValues) => void;
   onCancel: () => void;
+  prompts?: Array<{id: string, content: string}>;
 }
 
-export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
+export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionFormProps) {
   const formStartTime = useRef(Date.now());
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
@@ -46,9 +48,9 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-2xl mx-auto"
+      className="w-full max-w-2xl mx-auto relative z-10"
     >
-      <Card>
+      <Card className="relative">
         <CardHeader>
           <CardTitle>Reflect on Your Writing Experience</CardTitle>
         </CardHeader>
@@ -62,24 +64,26 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                 {["very-unsatisfied", "unsatisfied", "neutral", "satisfied", "very-satisfied"].map((value) => (
                   <label 
                     key={value} 
-                    className={`flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-secondary/80 ${
-                      errors.satisfaction ? "border-red-300" : "border-muted"
-                    }`}
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.satisfaction ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                   >
                     <input
                       type="radio"
-                      className="sr-only"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
                       {...register("satisfaction")}
                     />
-                    <div className="text-2xl mb-1">
+                    <div className="text-2xl mb-1 pointer-events-none">
                       {value === "very-satisfied" && "😄"}
                       {value === "satisfied" && "🙂"}
                       {value === "neutral" && "😐"}
                       {value === "unsatisfied" && "🙁"}
                       {value === "very-unsatisfied" && "😞"}
                     </div>
-                    <span className="text-xs">
+                    <span className="text-xs pointer-events-none">
                       {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
@@ -98,17 +102,19 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                 {["too-easy", "just-right", "challenging", "too-difficult"].map((value) => (
                   <label
                     key={value}
-                    className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-secondary/80 ${
-                      errors.challenge ? "border-red-300" : "border-muted"
-                    }`}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.challenge ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                   >
                     <input
                       type="radio"
-                      className="sr-only"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
                       {...register("challenge")}
                     />
-                    <span>
+                    <span className="pointer-events-none">
                       {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
@@ -124,7 +130,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                 Any other feedback? (Optional)
               </label>
               <textarea
-                className="textarea w-full h-24"
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
                 placeholder="Share your thoughts..."
                 {...register("feedback")}
               />

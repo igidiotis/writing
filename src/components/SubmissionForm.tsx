@@ -63,10 +63,10 @@ type FormValues = z.infer<typeof formSchema>;
 interface SubmissionFormProps {
   onSubmit: (data: FormValues) => void;
   onCancel: () => void;
-  prompts: Array<{id: string, content: string}>;
+  prompts?: Array<{id: string, content: string}>;
 }
 
-export function SubmissionForm({ onSubmit, onCancel, prompts }: SubmissionFormProps) {
+export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionFormProps) {
   const formStartTime = useRef(Date.now());
   const [emotionalResponseIsOther, setEmotionalResponseIsOther] = useState(false);
   
@@ -420,26 +420,6 @@ export function SubmissionForm({ onSubmit, onCancel, prompts }: SubmissionFormPr
                 {errors.learningValue && (
                   <p className="text-sm text-red-500 mt-1">Please select an option</p>
                 )}
-              </div>
-            </div>
-
-            {/* Contact for Research (Optional) */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Further Research Participation (Optional)</h3>
-              
-              <div className="space-y-2">
-                <label className="block text-sm font-medium mb-2">
-                  Email Address (Optional)
-                </label>
-                <input
-                  type="email"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                  placeholder="your.email@example.com"
-                  {...register("contactEmail")}
-                />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Your data will remain anonymous in our research. We'll only use your email if you wish to participate in future online focus groups or receive our research findings. Providing your email is completely optional.
-                </p>
               </div>
             </div>
 

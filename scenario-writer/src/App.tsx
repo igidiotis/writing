@@ -212,6 +212,10 @@ function MainApp() {
   
   // Cancel submission and go back to writing
   const handleCancelSubmit = () => {
+    // Save content to localStorage before canceling to ensure it's not lost
+    const key = `draft_${sessionId}`;
+    localStorage.setItem(key, content);
+    
     setIsSubmitting(false);
   };
   
@@ -242,7 +246,8 @@ function MainApp() {
       return (
         <SubmissionForm 
           onSubmit={handleFormSubmit} 
-          onCancel={handleCancelSubmit} 
+          onCancel={handleCancelSubmit}
+          prompts={rules.map(rule => ({ id: rule.id, content: rule.content }))}
         />
       );
     }
