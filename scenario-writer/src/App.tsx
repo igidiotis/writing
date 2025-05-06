@@ -329,7 +329,7 @@ function MainApp() {
       <header className="w-full max-w-3xl mx-auto mb-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Future Scenario Writer</h1>
         <p className="text-muted-foreground mt-2">
-          Create a speculative story about our future world
+          Write your own futuristic educational scenario
         </p>
       </header>
       
