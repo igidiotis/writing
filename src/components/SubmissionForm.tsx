@@ -24,6 +24,8 @@ interface SubmissionFormProps {
 export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionFormProps) {
   const formStartTime = useRef(Date.now());
   
+  const hasPrompts = prompts.length > 0;
+  
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,6 +38,8 @@ export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionF
   const onFormSubmit = (data: FormValues) => {
     // Add timing data
     const _timeSpentMs = Date.now() - formStartTime.current;
+    // Add prompt count to the submission data
+    const promptCount = prompts.length;
     onSubmit({
       ...data,
       // Attach any additional metadata about form completion timing if needed
@@ -126,7 +130,7 @@ export function SubmissionForm({ onSubmit, onCancel, prompts = [] }: SubmissionF
             </div>
 
             {/* Only show prompts section if prompts exist */}
-            {prompts.length > 0 && (
+            {hasPrompts && (
               <div className="space-y-2 p-3 bg-secondary/10 rounded-lg">
                 <h3 className="text-sm font-medium">Prompts you responded to:</h3>
                 <ul className="list-disc ml-5 text-sm text-muted-foreground space-y-1">
