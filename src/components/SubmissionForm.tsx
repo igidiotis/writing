@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -50,6 +51,11 @@ const formSchema = z.object({
   
   // Optional contact information
   contactEmail: z.string().email().optional(),
+  
+  // Metadata
+  _meta: z.object({
+    feedbackTimeMs: z.number()
+  }).optional()
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -180,11 +186,11 @@ export function SubmissionForm({ onSubmit, onCancel, prompts }: SubmissionFormPr
                 {["very-negative", "negative", "neutral", "positive", "very-positive"].map((value) => (
                   <label 
                     key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-200
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.overallExperience ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/40 hover:to-secondary/60 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/20 [&:has(input:checked)]:to-primary/30 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-sm`}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                   >
                     <input
                       type="radio"
@@ -343,11 +349,11 @@ export function SubmissionForm({ onSubmit, onCancel, prompts }: SubmissionFormPr
                   {["inspired", "challenged", "frustrated", "surprised", "confused", "enlightened", "other"].map((value) => (
                     <label
                       key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-200
+                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                       ${errors.emotionalResponse ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/40 hover:to-secondary/60 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/20 [&:has(input:checked)]:to-primary/30 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-sm`}
+                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                     >
                       <input
                         type="radio"
@@ -393,11 +399,11 @@ export function SubmissionForm({ onSubmit, onCancel, prompts }: SubmissionFormPr
                   {["none", "slight", "moderate", "significant", "transformative"].map((value) => (
                     <label
                       key={value}
-                      className={`relative flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all duration-200
+                      className={`relative flex items-center justify-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                       ${errors.learningValue ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/40 hover:to-secondary/60 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/20 [&:has(input:checked)]:to-primary/30 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-sm`}
+                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                     >
                       <input
                         type="radio"
