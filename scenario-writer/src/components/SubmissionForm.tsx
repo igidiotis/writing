@@ -105,7 +105,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             {/* Overall Experience */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Overall Experience
+                Overall Experience (Your general satisfaction with the writing session)
               </label>
               <div className="flex flex-wrap gap-3">
                 {["very-negative", "negative", "neutral", "positive", "very-positive"].map((value) => (
@@ -144,12 +144,12 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             {/* Prompt Effectiveness */}
             <div className="space-y-4">
               <label className="block text-sm font-medium">
-                Prompt Effectiveness
+                Prompt Effectiveness (How well the prompts supported your writing)
               </label>
               
               {/* Creativity */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Creativity</label>
+                <label className="block text-sm mb-1">Creativity (How well the prompts sparked new ideas)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -176,7 +176,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Clarity */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Clarity</label>
+                <label className="block text-sm mb-1">Clarity (How easy the prompts were to understand)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -203,7 +203,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Timing */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Timing</label>
+                <label className="block text-sm mb-1">Timing (When the prompts appeared in your writing flow)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["poor", "fair", "good", "excellent"].map((value) => (
                     <label
@@ -230,7 +230,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Relevance */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Relevance</label>
+                <label className="block text-sm mb-1">Relevance (How well the prompts fit your story direction)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -259,12 +259,12 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             {/* Flow Experience */}
             <div className="space-y-4">
               <label className="block text-sm font-medium">
-                Flow Experience
+                Flow Experience (Your state of mind during writing)
               </label>
               
               {/* Immersion */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Immersion</label>
+                <label className="block text-sm mb-1">Immersion (How absorbed you felt in the writing process)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -291,7 +291,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Time Perception */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Time Perception</label>
+                <label className="block text-sm mb-1">Time Perception (How your sense of time changed while writing)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["distorted", "somewhat-distorted", "normal", "lost-track"].map((value) => (
                     <label
@@ -318,7 +318,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Idea Generation */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Idea Generation</label>
+                <label className="block text-sm mb-1">Idea Generation (How easily new ideas came to you)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["struggled", "occasional", "consistent", "abundant"].map((value) => (
                     <label
@@ -448,7 +448,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               
               {/* Coherence */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Coherence</label>
+                <label className="block text-sm mb-1">Coherence (How well the story parts connect together)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -475,7 +475,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Originality */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Originality</label>
+                <label className="block text-sm mb-1">Originality (How unique or novel your story feels)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["low", "medium", "high", "very-high"].map((value) => (
                     <label
@@ -502,7 +502,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
 
               {/* Development */}
               <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Development</label>
+                <label className="block text-sm mb-1">Development (How well the story progresses and evolves)</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {["poor", "fair", "good", "excellent"].map((value) => (
                     <label
@@ -543,7 +543,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             {/* Optional Contact */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Email (Optional)
+                Email (Optional - For future research participation)
               </label>
               <input
                 type="email"
