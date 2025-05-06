@@ -125,6 +125,12 @@ function MainApp() {
   const handleContentChange = (newContent: string, newWordCount: number) => {
     setContent(newContent);
     setWordCount(newWordCount);
+    
+    // Save to localStorage immediately
+    if (newContent.trim()) {
+      const key = `draft_${sessionId}`;
+      localStorage.setItem(key, newContent);
+    }
   };
   
   // Track editor events
@@ -275,6 +281,7 @@ function MainApp() {
     return (
       <>
         <Editor 
+          initialContent={content}
           onContentChange={handleContentChange} 
           onTrackEvent={handleTrackEvent} 
         />

@@ -15,16 +15,24 @@ interface EditorEvent {
 }
 
 export interface EditorProps {
+  initialContent?: string;
   onContentChange: (content: string, wordCount: number) => void;
   onTrackEvent: (event: EditorEvent) => void;
 }
 
-export function Editor({ onContentChange, onTrackEvent }: EditorProps) {
-  const [content, setContent] = useState("");
+export function Editor({ initialContent = "", onContentChange, onTrackEvent }: EditorProps) {
+  const [content, setContent] = useState(initialContent);
   const [wordCount, setWordCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pauseTimeoutRef = useRef<number | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
+  
+  // Initialize with initialContent when it changes
+  useEffect(() => {
+    if (initialContent) {
+      setContent(initialContent);
+    }
+  }, [initialContent]);
   
   // Track word count
   useEffect(() => {
