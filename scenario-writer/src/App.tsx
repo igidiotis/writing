@@ -12,40 +12,77 @@ import { saveSession, saveSessionToLocalStorage, downloadSessionAsJson, type Wri
 // Example rules - in a real app these might come from an API or config
 const INITIAL_RULES: Rule[] = [
   {
-    id: "rule1",
-    content: "Write from the perspective of someone living 50 years in the future",
+    id: "structure1",
+    content: "Write from the perspective of someone at least 10 years from today.",
     type: "mandatory",
     condition: { type: "wordCount", value: 10 },
     status: "inactive",
   },
   {
-    id: "rule2",
-    content: "Include a reference to a technology that doesn't exist yet",
+    id: "structure2",
+    content: "Include at least one dialogue exchange between people with different views on education",
+    type: "optional", 
+    condition: { type: "wordCount", value: 30 },
+    status: "inactive",
+  },
+  {
+    id: "structure3",
+    content: "Compare and contrast this future education system with today's approach",
     type: "mandatory",
-    condition: { type: "wordCount", value: 100 },
+    condition: { type: "time", value: 90 }, // After 1.5 minutes
     status: "inactive",
   },
   {
-    id: "rule3",
-    content: "Mention how climate change has affected daily life",
-    type: "optional",
-    condition: { type: "wordCount", value: 200 },
-    status: "inactive",
-  },
-  {
-    id: "rule4",
-    content: "Describe a cultural tradition that has evolved over time",
-    type: "optional",
-    condition: { type: "time", value: 120 }, // After 2 minutes
-    status: "inactive",
-  },
-  {
-    id: "rule5",
-    content: "Include a moment of personal reflection about society",
+    id: "structure4",
+    content: "Consider ending with a reflection on how these educational changes have impacted society",
     type: "mandatory",
-    condition: { type: "wordCount", value: 300 },
+    condition: { type: "wordCount", value: 60 },
     status: "inactive",
   },
+  
+  // Content/Creative Prompts (Optional)
+  {
+    id: "content1",
+    content: "Describe a new learning technology that has revolutionized education",
+    type: "optional",
+    condition: { type: "wordCount", value: 40 },
+    status: "inactive",
+  },
+  {
+    id: "content2",
+    content: "Include a character who resists or struggles with the new education system",
+    type: "optional",
+    condition: { type: "wordCount", value: 75 },
+    status: "inactive",
+  },
+  {
+    id: "content3",
+    content: "Describe how the physical spaces for learning have changed",
+    type: "mandatory",
+    condition: { type: "time", value: 180 }, // After 3 minutes
+    status: "inactive",
+  },
+  {
+    id: "content4",
+    content: "Incorporate how global events (climate, politics, etc.) have shaped education",
+    type: "optional",
+    condition: { type: "wordCount", value: 90 },
+    status: "inactive",
+  },
+  {
+    id: "content5",
+    content: "Include a reference to how the role of teachers has evolved",
+    type: "optional",
+    condition: { type: "wordCount", value: 40 },
+    status: "inactive",
+  },
+  {
+    id: "wildcard",
+    content: "Add an unexpected disruption or innovation that changed education forever",
+    type: "optional",
+    condition: { type: "time", value: 180 }, // After 3 minutes
+    status: "inactive",
+  }
 ];
 
 function MainApp() {
