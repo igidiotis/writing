@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "./ui/button";
 
 interface EditorEvent {
-  type: 'type' | 'delete' | 'paste' | 'pause' | 'resume';
+  type: 'type' | 'delete' | 'paste' | 'pause' | 'resume' | 'consent';
   timestamp: number;
   content?: string;
   selection?: {
@@ -26,6 +26,7 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
   const [content, setContent] = useState(initialContent);
   const [wordCount, setWordCount] = useState(0);
   const [consentOpen, setConsentOpen] = useState(false);
+  const [hasConsented, setHasConsented] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pauseTimeoutRef = useRef<number | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
@@ -96,6 +97,12 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
 
   const handleKeyDown = (_e: KeyboardEvent<HTMLTextAreaElement>) => {
     // Add additional tracking if needed
+  };
+
+  const handleConsent = () => {
+    setHasConsented(true);
+    trackEvent('consent', { timestamp: Date.now() });
+    setConsentOpen(false);
   };
 
   return (
@@ -238,9 +245,12 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
                   </p>
                 </div>
               </DialogDescription>
-              <DialogClose asChild>
-                <Button className="w-full">I Understand and Consent</Button>
-              </DialogClose>
+              <Button 
+                className="w-full" 
+                onClick={handleConsent}
+              >
+                I Understand and Consent
+              </Button>
             </DialogContent>
           </Dialog>
         </CardContent>
