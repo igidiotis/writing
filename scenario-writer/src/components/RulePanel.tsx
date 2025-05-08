@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { WildcardPrompt } from "./WildcardPrompt";
 
 export interface Rule {
   id: string;
@@ -21,9 +22,20 @@ interface RulePanelProps {
   wordCount: number;
   startTime: number;
   onRuleInteraction: (ruleId: string, action: 'complete' | 'skip') => void;
+  showWildcard?: boolean;
+  onWildcardAccept?: () => void;
+  onWildcardDecline?: () => void;
 }
 
-export function RulePanel({ rules, wordCount, startTime, onRuleInteraction }: RulePanelProps) {
+export function RulePanel({ 
+  rules, 
+  wordCount, 
+  startTime, 
+  onRuleInteraction,
+  showWildcard = false,
+  onWildcardAccept,
+  onWildcardDecline
+}: RulePanelProps) {
   const [activeRules, setActiveRules] = useState<Rule[]>([]);
   
   // Update active rules based on conditions
@@ -75,13 +87,20 @@ export function RulePanel({ rules, wordCount, startTime, onRuleInteraction }: Ru
           <CardTitle>Writing Prompts</CardTitle>
         </CardHeader>
         <CardContent>
-          {activeRules.length === 0 ? (
+          {activeRules.length === 0 && !showWildcard ? (
             <p className="text-center text-muted-foreground italic">
               Keep writing! Prompts will appear as you progress...
             </p>
           ) : (
             <div className="space-y-4">
               <AnimatePresence>
+                {showWildcard && onWildcardAccept && onWildcardDecline && (
+                  <WildcardPrompt 
+                    onAccept={onWildcardAccept}
+                    onDecline={onWildcardDecline}
+                  />
+                )}
+                
                 {activeRules.map(rule => (
                   <motion.div
                     key={rule.id}

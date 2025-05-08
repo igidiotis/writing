@@ -284,9 +284,6 @@ function MainApp() {
           initialContent={content}
           onContentChange={handleContentChange} 
           onTrackEvent={handleTrackEvent} 
-        />
-        
-        <RulePanel 
           rules={rules}
           wordCount={wordCount}
           startTime={startTimeRef.current}
