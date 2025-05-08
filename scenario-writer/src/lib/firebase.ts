@@ -29,6 +29,7 @@ export interface WritingSession {
   eventLog: Array<{
     type: string;
     timestamp: number;
+    wildcardId?: string; // Added wildcardId for tracking wildcard usage
     [key: string]: any;
   }>;
   rules: Array<{

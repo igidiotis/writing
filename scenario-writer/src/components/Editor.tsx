@@ -3,17 +3,19 @@ import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
 import { Textarea } from "./ui/textarea";
 import { Card, CardContent } from "./ui/card";
 import { motion } from "framer-motion";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose, DialogFooter } from "./ui/dialog";
 import { Button } from "./ui/button";
+import { getRandomWildcardStoryOpener } from "../lib/wildcardStoryOpeners";
 
 interface EditorEvent {
-  type: 'type' | 'delete' | 'paste' | 'pause' | 'resume' | 'consent';
+  type: 'type' | 'delete' | 'paste' | 'pause' | 'resume' | 'consent' | 'wildcard_accepted' | 'wildcard_declined';
   timestamp: number;
   content?: string;
   selection?: {
     start: number;
     end: number;
   };
+  wildcardId?: string;
 }
 
 export interface EditorProps {
@@ -27,8 +29,11 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
   const [wordCount, setWordCount] = useState(0);
   const [consentOpen, setConsentOpen] = useState(false);
   const [hasConsented, setHasConsented] = useState(false);
+  const [wildcardOpen, setWildcardOpen] = useState(false);
+  const [wildcardShown, setWildcardShown] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pauseTimeoutRef = useRef<number | null>(null);
+  const wildcardTimeoutRef = useRef<number | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
   
   // Initialize with initialContent when it changes
@@ -44,6 +49,23 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
     setWordCount(words);
     onContentChange(content, words);
   }, [content, onContentChange]);
+
+  // Set up wildcard prompt timer
+  useEffect(() => {
+    // Only start wildcard timer if content is empty and wildcard hasn't been shown yet
+    if (content.trim() === '' && !wildcardShown) {
+      wildcardTimeoutRef.current = window.setTimeout(() => {
+        setWildcardOpen(true);
+        setWildcardShown(true);
+      }, 10000); // Show wildcard prompt after 10 seconds
+    }
+
+    return () => {
+      if (wildcardTimeoutRef.current) {
+        window.clearTimeout(wildcardTimeoutRef.current);
+      }
+    };
+  }, [content, wildcardShown]);
 
   // Track user events
   const trackEvent = (type: EditorEvent['type'], additionalData = {}) => {
@@ -103,6 +125,32 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
     setHasConsented(true);
     trackEvent('consent', { timestamp: Date.now() });
     setConsentOpen(false);
+  };
+
+  const handleAcceptWildcard = () => {
+    const wildcardOpener = getRandomWildcardStoryOpener();
+    const newContent = wildcardOpener.text;
+    
+    setContent(newContent);
+    trackEvent('wildcard_accepted', { 
+      content: newContent,
+      wildcardId: wildcardOpener.id
+    });
+    
+    setWildcardOpen(false);
+    
+    // Focus the textarea after inserting the wildcard text
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      // Position cursor at the end of the text
+      const length = newContent.length;
+      textareaRef.current.setSelectionRange(length, length);
+    }
+  };
+
+  const handleDeclineWildcard = () => {
+    trackEvent('wildcard_declined', { timestamp: Date.now() });
+    setWildcardOpen(false);
   };
 
   return (
@@ -249,8 +297,34 @@ export function Editor({ initialContent = "", onContentChange, onTrackEvent }: E
                 className="w-full" 
                 onClick={handleConsent}
               >
-                I Understand and Consent
+                I consent to participating in this research
               </Button>
+            </DialogContent>
+          </Dialog>
+          
+          {/* Wildcard Story Opener Dialog */}
+          <Dialog open={wildcardOpen} onOpenChange={setWildcardOpen}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Need inspiration to get started?</DialogTitle>
+              </DialogHeader>
+              <DialogDescription className="py-4">
+                Would you like a wildcard opening to your story to inspire you to begin?
+              </DialogDescription>
+              <DialogFooter>
+                <Button 
+                  variant="secondary" 
+                  onClick={handleDeclineWildcard}
+                >
+                  No thanks
+                </Button>
+                <Button 
+                  variant="primary" 
+                  onClick={handleAcceptWildcard}
+                >
+                  Yes, inspire me
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </CardContent>
