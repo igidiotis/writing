@@ -12,76 +12,74 @@ import { saveSession, saveSessionToLocalStorage, downloadSessionAsJson, type Wri
 // Example rules - in a real app these might come from an API or config
 const INITIAL_RULES: Rule[] = [
   {
-    id: "structure1",
-    content: "Write from the perspective of someone at least 10 years from today.",
-    type: "mandatory",
-    condition: { type: "wordCount", value: 10 },
-    status: "inactive",
+    "id": "structure1",
+    "content": "Consider setting your story at least 10 years from today",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 10 },
+    "status": "inactive"
   },
   {
-    id: "structure2",
-    content: "Include at least one dialogue exchange between people with different views on education",
-    type: "optional", 
-    condition: { type: "wordCount", value: 30 },
-    status: "inactive",
+    "id": "structure2",
+    "content": "You might include perspectives from different stakeholders in education",
+    "type": "optional", 
+    "condition": { "type": "wordCount", "value": 30 },
+    "status": "inactive"
   },
   {
-    id: "structure3",
-    content: "Compare and contrast this future education system with today's approach",
-    type: "mandatory",
-    condition: { type: "time", value: 90 }, // After 1.5 minutes
-    status: "inactive",
+    "id": "structure3",
+    "content": "Consider how this future system differs from today's education",
+    "type": "optional",
+    "condition": { "type": "time", "value": 90 },
+    "status": "inactive"
   },
   {
-    id: "structure4",
-    content: "Consider ending with a reflection on how these educational changes have impacted society",
-    type: "mandatory",
-    condition: { type: "wordCount", value: 60 },
-    status: "inactive",
-  },
-  
-  // Content/Creative Prompts (Optional)
-  {
-    id: "content1",
-    content: "Describe a new learning technology that has revolutionized education",
-    type: "optional",
-    condition: { type: "wordCount", value: 40 },
-    status: "inactive",
+    "id": "structure4",
+    "content": "If relevant, explore how these educational changes affect broader society",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 60 },
+    "status": "inactive"
   },
   {
-    id: "content2",
-    content: "Include a character who resists or struggles with the new education system",
-    type: "optional",
-    condition: { type: "wordCount", value: 75 },
-    status: "inactive",
+    "id": "content1",
+    "content": "What technologies might shape learning in this future?",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 40 },
+    "status": "inactive"
   },
   {
-    id: "content3",
-    content: "Describe how the physical spaces for learning have changed",
-    type: "mandatory",
-    condition: { type: "time", value: 180 }, // After 3 minutes
-    status: "inactive",
+    "id": "content2",
+    "content": "Consider including diverse reactions to the education system",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 75 },
+    "status": "inactive"
   },
   {
-    id: "content4",
-    content: "Incorporate how global events (climate, politics, etc.) have shaped education",
-    type: "optional",
-    condition: { type: "wordCount", value: 90 },
-    status: "inactive",
+    "id": "content3",
+    "content": "How might physical or virtual learning spaces evolve?",
+    "type": "optional",
+    "condition": { "type": "time", "value": 180 },
+    "status": "inactive"
   },
   {
-    id: "content5",
-    content: "Include a reference to how the role of teachers has evolved",
-    type: "optional",
-    condition: { type: "wordCount", value: 40 },
-    status: "inactive",
+    "id": "content4",
+    "content": "What global forces might influence education's development?",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 90 },
+    "status": "inactive"
   },
   {
-    id: "wildcard",
-    content: "Add an unexpected disruption or innovation that changed education forever",
-    type: "optional",
-    condition: { type: "time", value: 180 }, // After 3 minutes
-    status: "inactive",
+    "id": "content5",
+    "content": "How might the role of educators transform?",
+    "type": "optional",
+    "condition": { "type": "wordCount", "value": 40 },
+    "status": "inactive"
+  },
+  {
+    "id": "wildcard",
+    "content": "What unexpected development might change education's trajectory?",
+    "type": "optional",
+    "condition": { "type": "time", "value": 180 },
+    "status": "inactive"
   }
 ];
 
