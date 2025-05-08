@@ -6,24 +6,36 @@ export interface WildcardStoryOpener {
 // Array of wildcard story openers related to future education
 export const wildcardStoryOpeners: WildcardStoryOpener[] = [
   {
-    id: "edu1",
-    text: "The holographic classroom dissolved around me as I removed my neural interface. Ten years into the new education system, I still found myself nostalgic for physical textbooks and face-to-face discussions."
+    "id": "extinction-era",
+    "text": "The university farm's irrigation system hummed with recycled water as I logged into another global crisis response meeting. My climate migration research had become essential curriculum in the survival education networks spanning what used to be national borders."
   },
   {
-    id: "edu2",
-    text: "Every student's personalized AI tutor spoke in a voice designed specifically for their learning style. Mine had a calm, methodical tone that contrasted sharply with the chaos of the learning hub I had just entered."
+    "id": "ai-academy",
+    "text": "My neural profile updated in real-time as I walked through campus, the invisible data collection barely noticeable anymore. The AI had already determined my aptitudes before I'd even chosen a field—literature reviews and research synthesis now happened while I slept."
   },
   {
-    id: "edu3",
-    text: "The global education network crashed for the third time this week, sending millions of students back to emergency offline modules. Some children had never experienced education without constant connectivity."
+    "id": "universal-university",
+    "text": "I adjusted my haptic gloves before entering the immersive lab simulation, connecting with classmates scattered across six continents. The physical campus, where I'd never actually set foot, existed primarily as a research hub and community anchor."
   },
   {
-    id: "edu4",
-    text: "The Ministry of Adaptive Learning had just announced another curriculum overhaul—the fourth in as many years. As an educator, I wondered if we were finally getting closer to a system that truly served all students."
+    "id": "extreme-unbundling",
+    "text": "My reputation score fluctuated as student reviews of my latest micro-lecture came in. Ten learning shots per day was barely enough to cover my basic expenses, unlike Professor Chen whose courses commanded premium prices on all major education platforms."
   },
   {
-    id: "edu5",
-    text: "My graduation certificate contained no grades, only a detailed neural map of my competencies and a personalized learning trajectory. Traditional universities had become obsolete five years ago."
+    "id": "justice-driven",
+    "text": "Our transdisciplinary team had just secured another community partnership focused on equitable water access. The university's transition from academic publisher to social change engine had transformed both our research methods and teaching philosophy."
+  },
+  {
+    "id": "ivory-tower",
+    "text": "The campus gates closed behind me as I crossed the historic quadrangle, acutely aware of my privilege. Only fifty students per year were admitted to this program, a stark contrast to the digital upskilling centers that served the majority of the population."
+  },
+  {
+    "id": "ennui",
+    "text": "My lifelong learning subscription auto-renewed for another decade as my posthuman philosophy course began. With work obsolete and AIs managing production, understanding the purpose of human existence had become the central question of higher education."
+  },
+  {
+    "id": "enhancement",
+    "text": "I administered my focus enhancer before the exam, just like everyone else. The brain-computer interface tuned to my neural patterns, triggering the familiar sensation of heightened cognition—those who studied without augmentation were increasingly rare."
   }
 ];
 
