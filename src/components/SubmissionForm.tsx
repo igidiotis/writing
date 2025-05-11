@@ -8,32 +8,29 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/card"
 import { Button } from "./ui/button";
 
 const formSchema = z.object({
-  overallExperience: z.enum(["very-negative", "negative", "neutral", "positive", "very-positive"]),
-  promptEffectiveness: z.object({
-    creativity: z.enum(["low", "medium", "high", "very-high"]),
-    clarity: z.enum(["low", "medium", "high", "very-high"]),
-    timing: z.enum(["poor", "fair", "good", "excellent"]),
-    relevance: z.enum(["low", "medium", "high", "very-high"]),
-  }),
-  flowExperience: z.object({
-    immersion: z.enum(["low", "medium", "high", "very-high"]),
-    timePerception: z.enum(["distorted", "somewhat-distorted", "normal", "lost-track"]),
-    ideaGeneration: z.enum(["struggled", "occasional", "consistent", "abundant"]),
-  }),
-  specificPromptImpact: z.object({
-    mostHelpful: z.string().min(0),
-    leastHelpful: z.string().min(0),
-  }),
-  cognitiveEmotionalResponse: z.array(z.enum([
-    "inspired", "challenged", "frustrated", "engaged", "bored", 
-    "confident", "anxious", "focused", "distracted", "other"
-  ])).min(1),
-  learningValue: z.enum(["none", "minimal", "moderate", "significant", "transformative"]),
-  narrativeQuality: z.object({
-    coherence: z.enum(["low", "medium", "high", "very-high"]),
-    originality: z.enum(["low", "medium", "high", "very-high"]),
-    development: z.enum(["poor", "fair", "good", "excellent"]),
-  }),
+  easeOfUse: z.enum(["very-difficult", "difficult", "neutral", "easy", "very-easy"]),
+  mentalEffort: z.enum(["low", "medium", "high", "very-high"]),
+  interruptions: z.enum(["never", "occasionally", "often", "always"]),
+  perceivedLearning: z.enum(["not-at-all", "a-little", "moderately", "a-great-deal"]),
+  insightfulness: z.enum(["none", "minimal", "significant", "transformative"]),
+  plausibility: z.enum(["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"]),
+  detailSpecificity: z.enum(["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"]),
+  priorExposure: z.enum([
+    "never-heard",
+    "heard-never-read",
+    "read-never-written",
+    "read-and-written"
+  ]),
+  motivation: z.enum([
+    "professional-interest",
+    "academic-requirement",
+    "personal-curiosity",
+    "other"
+  ]),
+  biggestSurprise: z.string().min(0),
+  realWorldApplication: z.string().min(0),
+  interestInOthers: z.enum(["yes", "no"]),
+  willingnessToShare: z.enum(["yes", "no"]),
   additionalFeedback: z.string().min(0).max(500),
   email: z.string().email().optional().or(z.literal("")),
 });
@@ -51,29 +48,19 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      overallExperience: undefined,
-      promptEffectiveness: {
-        creativity: undefined,
-        clarity: undefined,
-        timing: undefined,
-        relevance: undefined,
-      },
-      flowExperience: {
-        immersion: undefined,
-        timePerception: undefined,
-        ideaGeneration: undefined,
-      },
-      specificPromptImpact: {
-        mostHelpful: "",
-        leastHelpful: "",
-      },
-      cognitiveEmotionalResponse: [],
-      learningValue: undefined,
-      narrativeQuality: {
-        coherence: undefined,
-        originality: undefined,
-        development: undefined,
-      },
+      easeOfUse: undefined,
+      mentalEffort: undefined,
+      interruptions: undefined,
+      perceivedLearning: undefined,
+      insightfulness: undefined,
+      plausibility: undefined,
+      detailSpecificity: undefined,
+      priorExposure: undefined,
+      motivation: undefined,
+      biggestSurprise: "",
+      realWorldApplication: "",
+      interestInOthers: undefined,
+      willingnessToShare: undefined,
       additionalFeedback: "",
       email: "",
     },
@@ -104,14 +91,14 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How satisfied are you with your scenario?
+                How easy was it to use the tool?
               </label>
               <div className="flex flex-wrap gap-3">
-                {["very-negative", "negative", "neutral", "positive", "very-positive"].map((value) => (
+                {["very-difficult", "difficult", "neutral", "easy", "very-easy"].map((value) => (
                   <label 
                     key={value} 
                     className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.overallExperience ? "border-red-300" : "border-muted"}
+                    ${errors.easeOfUse ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -120,14 +107,14 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("overallExperience")}
+                      {...register("easeOfUse")}
                     />
                     <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "very-positive" && "😄"}
-                      {value === "positive" && "🙂"}
+                      {value === "very-easy" && "😄"}
+                      {value === "easy" && "🙂"}
                       {value === "neutral" && "😐"}
-                      {value === "negative" && "🙁"}
-                      {value === "very-negative" && "😞"}
+                      {value === "difficult" && "🙁"}
+                      {value === "very-difficult" && "😞"}
                     </div>
                     <span className="text-xs pointer-events-none">
                       {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
@@ -135,21 +122,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.overallExperience && (
+              {errors.easeOfUse && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How effective were the prompts?
+                How much mental effort did you put into using the tool?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["low", "medium", "high", "very-high"].map((value) => (
                   <label
                     key={value}
                     className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.promptEffectiveness ? "border-red-300" : "border-muted"}
+                    ${errors.mentalEffort ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -158,7 +145,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("promptEffectiveness.creativity")}
+                      {...register("mentalEffort")}
                     />
                     <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -166,21 +153,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.promptEffectiveness && (
+              {errors.mentalEffort && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How clear were the prompts?
+                How often were you interrupted while using the tool?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["low", "medium", "high", "very-high"].map((value) => (
+                {["never", "occasionally", "often", "always"].map((value) => (
                   <label
                     key={value}
                     className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.promptEffectiveness ? "border-red-300" : "border-muted"}
+                    ${errors.interruptions ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -189,7 +176,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("promptEffectiveness.clarity")}
+                      {...register("interruptions")}
                     />
                     <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -197,220 +184,36 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.promptEffectiveness && (
+              {errors.interruptions && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How timely were the prompts?
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["poor", "fair", "good", "excellent"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.promptEffectiveness ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                  >
-                    <input
-                      type="radio"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      value={value}
-                      {...register("promptEffectiveness.timing")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.promptEffectiveness && (
-                <p className="text-sm text-red-500 mt-1">Please select an option</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                How relevant were the prompts?
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["low", "medium", "high", "very-high"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.promptEffectiveness ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                  >
-                    <input
-                      type="radio"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      value={value}
-                      {...register("promptEffectiveness.relevance")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.promptEffectiveness && (
-                <p className="text-sm text-red-500 mt-1">Please select an option</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                How immersive was the writing experience?
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["low", "medium", "high", "very-high"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.flowExperience ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                  >
-                    <input
-                      type="radio"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      value={value}
-                      {...register("flowExperience.immersion")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.flowExperience && (
-                <p className="text-sm text-red-500 mt-1">Please select an option</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                How distorted was your perception of time?
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["distorted", "somewhat-distorted", "normal", "lost-track"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.flowExperience ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                  >
-                    <input
-                      type="radio"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      value={value}
-                      {...register("flowExperience.timePerception")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.flowExperience && (
-                <p className="text-sm text-red-500 mt-1">Please select an option</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                How consistent was your idea generation?
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["struggled", "occasional", "consistent", "abundant"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.flowExperience ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                  >
-                    <input
-                      type="radio"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      value={value}
-                      {...register("flowExperience.ideaGeneration")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.flowExperience && (
-                <p className="text-sm text-red-500 mt-1">Please select an option</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                Which prompt was most helpful?
-              </label>
-              <textarea
-                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                placeholder="Share your thoughts..."
-                {...register("specificPromptImpact.mostHelpful")}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                Which prompt was least helpful?
-              </label>
-              <textarea
-                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                placeholder="Share your thoughts..."
-                {...register("specificPromptImpact.leastHelpful")}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                How did the prompts affect your cognitive and emotional state?
+                How much did you learn from using the tool?
               </label>
               <div className="flex flex-wrap gap-3">
-                {["inspired", "challenged", "frustrated", "engaged", "bored", 
-                  "confident", "anxious", "focused", "distracted", "other"].map((value) => (
+                {["not-at-all", "a-little", "moderately", "a-great-deal"].map((value) => (
                   <label 
                     key={value} 
                     className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.cognitiveEmotionalResponse ? "border-red-300" : "border-muted"}
+                    ${errors.perceivedLearning ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
                   >
                     <input
-                      type="checkbox"
+                      type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("cognitiveEmotionalResponse")}
+                      {...register("perceivedLearning")}
                     />
                     <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "inspired" && "😄"}
-                      {value === "challenged" && "🙂"}
-                      {value === "frustrated" && "🙁"}
-                      {value === "engaged" && "😄"}
-                      {value === "bored" && "😞"}
-                      {value === "confident" && "😄"}
-                      {value === "anxious" && "😞"}
-                      {value === "focused" && "😄"}
-                      {value === "distracted" && "😞"}
-                      {value === "other" && "🤔"}
+                      {value === "a-great-deal" && "😄"}
+                      {value === "moderately" && "🙂"}
+                      {value === "a-little" && "😐"}
+                      {value === "not-at-all" && "🙁"}
                     </div>
                     <span className="text-xs pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -418,21 +221,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.cognitiveEmotionalResponse && (
-                <p className="text-sm text-red-500 mt-1">Please select at least one option</p>
+              {errors.perceivedLearning && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                What was the learning value of the experience?
+                How insightful was the experience?
               </label>
               <div className="flex flex-wrap gap-3">
-                {["none", "minimal", "moderate", "significant", "transformative"].map((value) => (
+                {["none", "minimal", "significant", "transformative"].map((value) => (
                   <label 
                     key={value} 
                     className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.learningValue ? "border-red-300" : "border-muted"}
+                    ${errors.insightfulness ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -441,12 +244,11 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("learningValue")}
+                      {...register("insightfulness")}
                     />
                     <div className="text-2xl mb-1 pointer-events-none">
                       {value === "transformative" && "😄"}
                       {value === "significant" && "🙂"}
-                      {value === "moderate" && "😐"}
                       {value === "minimal" && "🙁"}
                       {value === "none" && "😞"}
                     </div>
@@ -456,21 +258,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.learningValue && (
+              {errors.insightfulness && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How coherent was the narrative?
+                How plausible was the scenario?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["low", "medium", "high", "very-high"].map((value) => (
+                {["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"].map((value) => (
                   <label
                     key={value}
                     className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.narrativeQuality ? "border-red-300" : "border-muted"}
+                    ${errors.plausibility ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -479,7 +281,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("narrativeQuality.coherence")}
+                      {...register("plausibility")}
                     />
                     <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -487,21 +289,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.narrativeQuality && (
+              {errors.plausibility && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How original was the narrative?
+                How detailed was the scenario?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["low", "medium", "high", "very-high"].map((value) => (
+                {["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"].map((value) => (
                   <label
                     key={value}
                     className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.narrativeQuality ? "border-red-300" : "border-muted"}
+                    ${errors.detailSpecificity ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -510,7 +312,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("narrativeQuality.originality")}
+                      {...register("detailSpecificity")}
                     />
                     <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -518,21 +320,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.narrativeQuality && (
+              {errors.detailSpecificity && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How developed was the narrative?
+                How much prior exposure did you have to the topic?
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["poor", "fair", "good", "excellent"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.narrativeQuality ? "border-red-300" : "border-muted"}
+              <div className="flex flex-wrap gap-3">
+                {["never-heard", "heard-never-read", "read-never-written", "read-and-written"].map((value) => (
+                  <label 
+                    key={value} 
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.priorExposure ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -541,15 +343,150 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("narrativeQuality.development")}
+                      {...register("priorExposure")}
                     />
-                    <span className="pointer-events-none">
+                    <div className="text-2xl mb-1 pointer-events-none">
+                      {value === "read-and-written" && "😄"}
+                      {value === "read-never-written" && "🙂"}
+                      {value === "heard-never-read" && "😐"}
+                      {value === "never-heard" && "🙁"}
+                    </div>
+                    <span className="text-xs pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
                     </span>
                   </label>
                 ))}
               </div>
-              {errors.narrativeQuality && (
+              {errors.priorExposure && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                What motivated you to use the tool?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {["professional-interest", "academic-requirement", "personal-curiosity", "other"].map((value) => (
+                  <label 
+                    key={value} 
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.motivation ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("motivation")}
+                    />
+                    <div className="text-2xl mb-1 pointer-events-none">
+                      {value === "professional-interest" && "😄"}
+                      {value === "academic-requirement" && "🙂"}
+                      {value === "personal-curiosity" && "😄"}
+                      {value === "other" && "🤔"}
+                    </div>
+                    <span className="text-xs pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.motivation && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                What was the biggest surprise in the experience?
+              </label>
+              <textarea
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Share your thoughts..."
+                {...register("biggestSurprise")}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                How would you apply this experience in the real world?
+              </label>
+              <textarea
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Share your thoughts..."
+                {...register("realWorldApplication")}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                Are you interested in sharing this experience with others?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {["yes", "no"].map((value) => (
+                  <label 
+                    key={value} 
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.interestInOthers ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("interestInOthers")}
+                    />
+                    <div className="text-2xl mb-1 pointer-events-none">
+                      {value === "yes" && "😄"}
+                      {value === "no" && "🙁"}
+                    </div>
+                    <span className="text-xs pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.interestInOthers && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                Are you willing to share this experience with others?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {["yes", "no"].map((value) => (
+                  <label 
+                    key={value} 
+                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.willingnessToShare ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("willingnessToShare")}
+                    />
+                    <div className="text-2xl mb-1 pointer-events-none">
+                      {value === "yes" && "😄"}
+                      {value === "no" && "🙁"}
+                    </div>
+                    <span className="text-xs pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.willingnessToShare && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
