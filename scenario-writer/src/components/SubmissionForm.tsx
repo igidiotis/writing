@@ -8,34 +8,22 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/card"
 import { Button } from "./ui/button";
 
 const formSchema = z.object({
-  overallExperience: z.enum(["very-negative", "negative", "neutral", "positive", "very-positive"]),
-  promptEffectiveness: z.object({
-    creativity: z.enum(["low", "medium", "high", "very-high"]),
-    clarity: z.enum(["low", "medium", "high", "very-high"]),
-    timing: z.enum(["poor", "fair", "good", "excellent"]),
-    relevance: z.enum(["low", "medium", "high", "very-high"]),
-  }),
-  flowExperience: z.object({
-    immersion: z.enum(["low", "medium", "high", "very-high"]),
-    timePerception: z.enum(["distorted", "somewhat-distorted", "normal", "lost-track"]),
-    ideaGeneration: z.enum(["struggled", "occasional", "consistent", "abundant"]),
-  }),
-  specificPromptImpact: z.object({
-    mostHelpful: z.string().min(0),
-    leastHelpful: z.string().min(0),
-  }),
-  cognitiveEmotionalResponse: z.array(z.enum([
-    "inspired", "challenged", "frustrated", "engaged", "bored", 
-    "confident", "anxious", "focused", "distracted", "other"
-  ])).min(1),
-  learningValue: z.enum(["none", "minimal", "moderate", "significant", "transformative"]),
-  narrativeQuality: z.object({
-    coherence: z.enum(["low", "medium", "high", "very-high"]),
-    originality: z.enum(["low", "medium", "high", "very-high"]),
-    development: z.enum(["poor", "fair", "good", "excellent"]),
-  }),
+  easeOfUse: z.enum(["very-difficult", "difficult", "neutral", "easy", "very-easy"]),
+  mentalEffort: z.enum(["low", "medium", "high", "very-high"]),
+  interruptions: z.enum(["never", "occasionally", "often", "always"]),
+  perceivedLearning: z.enum(["not-at-all", "a-little", "moderately", "a-great-deal"]),
+  insightfulness: z.enum(["none", "minimal", "significant", "transformative"]),
+  plausibility: z.enum(["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"]),
+  detailSpecificity: z.enum(["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"]),
+  priorExposure: z.enum(["never-heard", "heard-never-read", "read-never-written", "read-and-written"]),
+  motivation: z.enum(["professional-interest", "academic-requirement", "personal-curiosity", "other"]),
+  biggestSurprise: z.string().min(0),
+  realWorldApplication: z.string().min(0),
+  interestInOthers: z.enum(["yes", "no"]),
+  willingnessToShare: z.enum(["yes", "no"]),
   additionalFeedback: z.string().min(0).max(500),
   email: z.string().email().optional().or(z.literal("")),
+  formCompletionTime: z.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -51,40 +39,28 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      overallExperience: undefined,
-      promptEffectiveness: {
-        creativity: undefined,
-        clarity: undefined,
-        timing: undefined,
-        relevance: undefined,
-      },
-      flowExperience: {
-        immersion: undefined,
-        timePerception: undefined,
-        ideaGeneration: undefined,
-      },
-      specificPromptImpact: {
-        mostHelpful: "",
-        leastHelpful: "",
-      },
-      cognitiveEmotionalResponse: [],
-      learningValue: undefined,
-      narrativeQuality: {
-        coherence: undefined,
-        originality: undefined,
-        development: undefined,
-      },
+      easeOfUse: undefined,
+      mentalEffort: undefined,
+      interruptions: undefined,
+      perceivedLearning: undefined,
+      insightfulness: undefined,
+      plausibility: undefined,
+      detailSpecificity: undefined,
+      priorExposure: undefined,
+      motivation: undefined,
+      biggestSurprise: "",
+      realWorldApplication: "",
+      interestInOthers: undefined,
+      willingnessToShare: undefined,
       additionalFeedback: "",
       email: "",
     },
   });
 
   const onFormSubmit = (data: FormValues) => {
-    // Add timing data
-    const _timeSpentMs = Date.now() - formStartTime.current;
     onSubmit({
       ...data,
-      // Attach any additional metadata about form completion timing if needed
+      formCompletionTime: Date.now()
     });
   };
 
@@ -102,17 +78,17 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
         </CardHeader>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <CardContent className="space-y-6">
-            {/* Overall Experience */}
+            {/* Ease of Use */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Overall Experience (Your general satisfaction with the writing session)
+                How easy was it to use the writing tool?
               </label>
-              <div className="flex flex-wrap gap-3">
-                {["very-negative", "negative", "neutral", "positive", "very-positive"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.overallExperience ? "border-red-300" : "border-muted"}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {["very-difficult", "difficult", "neutral", "easy", "very-easy"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.easeOfUse ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -121,304 +97,30 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("overallExperience")}
+                      {...register("easeOfUse")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "very-positive" && "😄"}
-                      {value === "positive" && "🙂"}
-                      {value === "neutral" && "😐"}
-                      {value === "negative" && "🙁"}
-                      {value === "very-negative" && "😞"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
+                    <span className="pointer-events-none">
                       {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
                 ))}
               </div>
-              {errors.overallExperience && (
+              {errors.easeOfUse && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
-            {/* Prompt Effectiveness */}
-            <div className="space-y-4">
-              <label className="block text-sm font-medium">
-                Prompt Effectiveness (How well the prompts supported your writing)
-              </label>
-              
-              {/* Creativity */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Creativity (How well the prompts sparked new ideas)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.promptEffectiveness?.creativity ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("promptEffectiveness.creativity")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Clarity */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Clarity (How easy the prompts were to understand)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.promptEffectiveness?.clarity ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("promptEffectiveness.clarity")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Timing */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Timing (When the prompts appeared in your writing flow)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["poor", "fair", "good", "excellent"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.promptEffectiveness?.timing ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("promptEffectiveness.timing")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.charAt(0).toUpperCase() + value.slice(1)}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Relevance */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Relevance (How well the prompts fit your story direction)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.promptEffectiveness?.relevance ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("promptEffectiveness.relevance")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Flow Experience */}
-            <div className="space-y-4">
-              <label className="block text-sm font-medium">
-                Flow Experience (Your state of mind during writing)
-              </label>
-              
-              {/* Immersion */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Immersion (How absorbed you felt in the writing process)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.flowExperience?.immersion ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("flowExperience.immersion")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Time Perception */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Time Perception (How your sense of time changed while writing)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["distorted", "somewhat-distorted", "normal", "lost-track"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.flowExperience?.timePerception ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("flowExperience.timePerception")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Idea Generation */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Idea Generation (How easily new ideas came to you)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["struggled", "occasional", "consistent", "abundant"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.flowExperience?.ideaGeneration ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("flowExperience.ideaGeneration")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.charAt(0).toUpperCase() + value.slice(1)}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Specific Prompt Impact */}
+            {/* Mental Effort */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Specific Prompt Impact
+                How much mental effort did you expend to complete your story?
               </label>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm mb-1">
-                    Which prompt was most helpful?
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                    placeholder="Enter the prompt that helped most..."
-                    {...register("specificPromptImpact.mostHelpful")}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm mb-1">
-                    Which prompt was least helpful?
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                    placeholder="Enter the prompt that was least useful..."
-                    {...register("specificPromptImpact.leastHelpful")}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Cognitive/Emotional Response */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                Cognitive/Emotional Response (Select all that apply)
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                {["inspired", "challenged", "frustrated", "engaged", "bored", 
-                  "confident", "anxious", "focused", "distracted", "other"].map((value) => (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["low", "medium", "high", "very-high"].map((value) => (
                   <label
                     key={value}
                     className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.cognitiveEmotionalResponse ? "border-red-300" : "border-muted"}
-                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md`}
-                  >
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      value={value}
-                      {...register("cognitiveEmotionalResponse")}
-                    />
-                    <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.cognitiveEmotionalResponse && (
-                <p className="text-sm text-red-500 mt-1">Please select at least one option</p>
-              )}
-            </div>
-
-            {/* Learning Value */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium mb-2">
-                Learning Value
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                {["none", "minimal", "moderate", "significant", "transformative"].map((value) => (
-                  <label
-                    key={value}
-                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                    ${errors.learningValue ? "border-red-300" : "border-muted"}
+                    ${errors.mentalEffort ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
                     [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
@@ -427,7 +129,39 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       type="radio"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       value={value}
-                      {...register("learningValue")}
+                      {...register("mentalEffort")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.mentalEffort && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Interruptions */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                During writing, how often did you have to pause and reread prompts or instructions?
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["never", "occasionally", "often", "always"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.interruptions ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("interruptions")}
                     />
                     <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -435,127 +169,324 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                   </label>
                 ))}
               </div>
-              {errors.learningValue && (
+              {errors.interruptions && (
                 <p className="text-sm text-red-500 mt-1">Please select an option</p>
               )}
             </div>
 
-            {/* Narrative Quality */}
-            <div className="space-y-4">
-              <label className="block text-sm font-medium">
-                Narrative Quality
+            {/* Perceived Learning */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                To what extent did this exercise help you explore new perspectives on education?
               </label>
-              
-              {/* Coherence */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Coherence (How well the story parts connect together)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.narrativeQuality?.coherence ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("narrativeQuality.coherence")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["not-at-all", "a-little", "moderately", "a-great-deal"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.perceivedLearning ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("perceivedLearning")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                    </span>
+                  </label>
+                ))}
               </div>
+              {errors.perceivedLearning && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
 
-              {/* Originality */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Originality (How unique or novel your story feels)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["low", "medium", "high", "very-high"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.narrativeQuality?.originality ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("narrativeQuality.originality")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+            {/* Insightfulness */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                How much insight into real-world educational challenges did crafting your story provide?
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["none", "minimal", "significant", "transformative"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.insightfulness ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("insightfulness")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
               </div>
+              {errors.insightfulness && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
 
-              {/* Development */}
-              <div className="ml-4 space-y-2">
-                <label className="block text-sm mb-1">Development (How well the story progresses and evolves)</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["poor", "fair", "good", "excellent"].map((value) => (
-                    <label
-                      key={value}
-                      className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
-                      ${errors.narrativeQuality?.development ? "border-red-300" : "border-muted"}
-                      hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
-                      [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
-                      [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
-                    >
-                      <input
-                        type="radio"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        value={value}
-                        {...register("narrativeQuality.development")}
-                      />
-                      <span className="pointer-events-none">
-                        {value.charAt(0).toUpperCase() + value.slice(1)}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+            {/* Plausibility */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                How believable is the future scenario you described? (Note: a scenario does not need to be plausible in order to spark thinking)
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.plausibility ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("plausibility")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                    </span>
+                  </label>
+                ))}
               </div>
+              {errors.plausibility && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Detail & Specificity */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                How richly did you describe technologies, policies, and contexts in your story?
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.detailSpecificity ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("detailSpecificity")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.detailSpecificity && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Prior Exposure */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                Before today, how familiar were you with the concept of educational fiction?
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {[
+                  { value: "never-heard", label: "I'd never heard of it" },
+                  { value: "heard-never-read", label: "I'd heard of it but never read or written it" },
+                  { value: "read-never-written", label: "I'd read some but never written it" },
+                  { value: "read-and-written", label: "I'd both read and written educational fiction" }
+                ].map(({ value, label }) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.priorExposure ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("priorExposure")}
+                    />
+                    <span className="pointer-events-none">{label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.priorExposure && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Motivation */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                What was your primary motivation for writing a story today?
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: "professional-interest", label: "Professional interest" },
+                  { value: "academic-requirement", label: "Academic requirement" },
+                  { value: "personal-curiosity", label: "Personal curiosity" },
+                  { value: "other", label: "Other (please specify in comments)" }
+                ].map(({ value, label }) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.motivation ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("motivation")}
+                    />
+                    <span className="pointer-events-none">{label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.motivation && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Biggest Surprise */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                What element of your own story surprised you the most?
+              </label>
+              <textarea
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Share your thoughts..."
+                {...register("biggestSurprise")}
+              />
+            </div>
+
+            {/* Real-World Application */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                How might the ideas in your story inform real educational policy or practice?
+              </label>
+              <textarea
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Share your thoughts..."
+                {...register("realWorldApplication")}
+              />
+            </div>
+
+            {/* Interest in Others' Stories */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                Would you be interested in reading future scenarios created by other participants?
+              </label>
+              <div className="flex gap-3">
+                {["yes", "no"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.interestInOthers ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("interestInOthers")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.interestInOthers && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
+            </div>
+
+            {/* Willingness to Share */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium mb-2">
+                Would you share your story with colleagues or students?
+              </label>
+              <div className="flex gap-3">
+                {["yes", "no"].map((value) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                    ${errors.willingnessToShare ? "border-red-300" : "border-muted"}
+                    hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
+                    [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
+                    [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-md [&:has(input:checked)]:scale-105`}
+                  >
+                    <input
+                      type="radio"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      value={value}
+                      {...register("willingnessToShare")}
+                    />
+                    <span className="pointer-events-none">
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.willingnessToShare && (
+                <p className="text-sm text-red-500 mt-1">Please select an option</p>
+              )}
             </div>
 
             {/* Additional Feedback */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Additional Feedback (Optional)
+                Additional Comments (Optional)
               </label>
               <textarea
                 className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                placeholder="Suggestions for prompt improvement, general thoughts..."
+                placeholder="Any other thoughts or feedback..."
                 {...register("additionalFeedback")}
               />
             </div>
 
-            {/* Optional Contact */}
+            {/* Email */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Email (Optional - For future research participation)
+                Email (Optional)
               </label>
               <input
                 type="email"
                 className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                placeholder="Your email address..."
+                placeholder="name@example.com"
                 {...register("email")}
               />
               <p className="text-sm text-muted-foreground mt-1">
-                Your data will remain anonymous in our research. We'll only use your email if you wish to participate in future online focus groups or receive our research findings. Providing your email is completely optional.
+                Your email will only be used if you wish to participate in future research or receive updates about this project.
               </p>
             </div>
-            
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button 
@@ -577,4 +508,4 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
       </Card>
     </motion.div>
   );
-} 
+}
