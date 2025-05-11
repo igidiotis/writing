@@ -24,6 +24,8 @@ const formSchema = z.object({
   willingnessToShare: z.enum(["yes", "no"]),
   additionalFeedback: z.string().min(0).max(500),
   email: z.string().email().optional().or(z.literal("")),
+  country: z.string().min(0).optional(),
+  occupation: z.string().min(0).optional(),
   formCompletionTime: z.number().optional(),
 });
 
@@ -55,6 +57,8 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
       willingnessToShare: undefined,
       additionalFeedback: "",
       email: "",
+      country: "",
+      occupation: "",
     },
   });
 
@@ -485,8 +489,34 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                 {...register("email")}
               />
               <p className="text-sm text-muted-foreground mt-1">
-                Your email will only be used if you wish to participate in future research or receive updates about this project.
+                Your email will only be used if you wish to participate in future research or receive updates about this project. Your submission will remain anonymous (or it will be anonymised, if you share your email) if it is used as data for publication purposes.
               </p>
+            </div>
+
+            {/* Country */}
+            <div className="space-y-2 mb-6">
+              <label className="block text-sm font-medium mb-2">
+                Country (Optional)
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Your country"
+                {...register("country")}
+              />
+            </div>
+
+            {/* Occupation */}
+            <div className="space-y-2 mb-6">
+              <label className="block text-sm font-medium mb-2">
+                Occupation (Optional)
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                placeholder="Your occupation"
+                {...register("occupation")}
+              />
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
