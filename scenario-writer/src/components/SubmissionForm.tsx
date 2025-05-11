@@ -1,3 +1,4 @@
+// this is the submission form that WORKS for the scenario writer - make changes here and not in the one under src/components/SubmissionForm.tsx !
 import * as React from "react";
 import { useRef } from "react";
 import { z } from "zod";
@@ -79,7 +80,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <CardContent className="space-y-6">
             {/* Ease of Use */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How easy was it to use the writing tool?
               </label>
@@ -111,7 +112,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Mental Effort */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How much mental effort did you expend to complete your story?
               </label>
@@ -143,7 +144,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Interruptions */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 During writing, how often did you have to pause and reread prompts or instructions?
               </label>
@@ -175,7 +176,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Perceived Learning */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 To what extent did this exercise help you explore new perspectives on education?
               </label>
@@ -207,7 +208,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Insightfulness */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How much insight into real-world educational challenges did crafting your story provide?
               </label>
@@ -239,7 +240,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Plausibility */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How believable is the future scenario you described? (Note: a scenario does not need to be plausible in order to spark thinking)
               </label>
@@ -271,7 +272,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Detail & Specificity */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How richly did you describe technologies, policies, and contexts in your story?
               </label>
@@ -303,7 +304,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Prior Exposure */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 Before today, how familiar were you with the concept of educational fiction?
               </label>
@@ -338,7 +339,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Motivation */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 What was your primary motivation for writing a story today?
               </label>
@@ -373,7 +374,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Biggest Surprise */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 What element of your own story surprised you the most?
               </label>
@@ -385,7 +386,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Real-World Application */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 How might the ideas in your story inform real educational policy or practice?
               </label>
@@ -397,7 +398,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Interest in Others' Stories */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 Would you be interested in reading future scenarios created by other participants?
               </label>
@@ -429,7 +430,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Willingness to Share */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 Would you share your story with colleagues or students?
               </label>
@@ -461,7 +462,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Additional Feedback */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 Additional Comments (Optional)
               </label>
@@ -473,7 +474,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
             </div>
 
             {/* Email */}
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <label className="block text-sm font-medium mb-2">
                 Email (Optional)
               </label>
