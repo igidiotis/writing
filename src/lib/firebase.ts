@@ -41,19 +41,32 @@ export interface WritingSession {
     skippedAt?: number;
   }>;
   feedback?: {
-    easeOfUse: "very-difficult" | "difficult" | "neutral" | "easy" | "very-easy";
-    mentalEffort: "low" | "medium" | "high" | "very-high";
-    interruptions: "never" | "occasionally" | "often" | "always";
-    perceivedLearning: "not-at-all" | "a-little" | "moderately" | "a-great-deal";
-    insightfulness: "none" | "minimal" | "significant" | "transformative";
-    plausibility: "not-at-all-plausible" | "somewhat-plausible" | "quite-plausible" | "highly-plausible";
-    detailSpecificity: "very-sparse" | "some-detail" | "rich-detail" | "extremely-rich-detail";
-    priorExposure: "never-heard" | "heard-never-read" | "read-never-written" | "read-and-written";
-    motivation: "professional-interest" | "academic-requirement" | "personal-curiosity" | "other";
-    biggestSurprise: string;
-    realWorldApplication: string;
-    interestInOthers: "yes" | "no";
-    willingnessToShare: "yes" | "no";
+    overallExperience: "very-negative" | "negative" | "neutral" | "positive" | "very-positive";
+    promptEffectiveness: {
+      creativity: "low" | "medium" | "high" | "very-high";
+      clarity: "low" | "medium" | "high" | "very-high";
+      timing: "poor" | "fair" | "good" | "excellent";
+      relevance: "low" | "medium" | "high" | "very-high";
+    };
+    flowExperience: {
+      immersion: "low" | "medium" | "high" | "very-high";
+      timePerception: "distorted" | "somewhat-distorted" | "normal" | "lost-track";
+      ideaGeneration: "struggled" | "occasional" | "consistent" | "abundant";
+    };
+    specificPromptImpact: {
+      mostHelpful: string;
+      leastHelpful: string;
+    };
+    cognitiveEmotionalResponse: Array<
+      "inspired" | "challenged" | "frustrated" | "engaged" | "bored" |
+      "confident" | "anxious" | "focused" | "distracted" | "other"
+    >;
+    learningValue: "none" | "minimal" | "moderate" | "significant" | "transformative";
+    narrativeQuality: {
+      coherence: "low" | "medium" | "high" | "very-high";
+      originality: "low" | "medium" | "high" | "very-high";
+      development: "poor" | "fair" | "good" | "excellent";
+    };
     additionalFeedback?: string;
     email?: string;
     formCompletionTime: number;

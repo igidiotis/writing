@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Editor } from "./components/Editor";
 import { RulePanel, type Rule } from "./components/RulePanel";
-import { SubmissionForm } from "./components/SubmissionForm";
+import { SubmissionForm } from "../scenario-writer/src/components/SubmissionForm";
 import { Button } from "./components/ui/button";
 import { ToastProvider, useToast } from "./components/ui/toast";
 import { saveSession, saveSessionToLocalStorage, downloadSessionAsJson, type WritingSession } from "./lib/firebase";
