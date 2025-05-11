@@ -16,7 +16,7 @@ const formSchema = z.object({
   plausibility: z.enum(["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"]),
   detailSpecificity: z.enum(["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"]),
   priorExposure: z.enum(["never-heard", "heard-never-read", "read-never-written", "read-and-written"]),
-  motivation: z.enum(["professional-interest", "academic-requirement", "personal-curiosity", "other"]),
+  motivation: z.enum(["professional-interest", "personal-curiosity", "other"]),
   biggestSurprise: z.string().min(0),
   realWorldApplication: z.string().min(0),
   interestInOthers: z.enum(["yes", "no"]),
@@ -345,7 +345,6 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { value: "professional-interest", label: "Professional interest" },
-                  { value: "academic-requirement", label: "Academic requirement" },
                   { value: "personal-curiosity", label: "Personal curiosity" },
                   { value: "other", label: "Other (please specify in comments)" }
                 ].map(({ value, label }) => (
