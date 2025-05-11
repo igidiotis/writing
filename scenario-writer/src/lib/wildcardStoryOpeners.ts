@@ -11,31 +11,31 @@ export const wildcardStoryOpeners: WildcardStoryOpener[] = [
   },
   {
     "id": "ai-academy",
-    "text": "My neural profile updated in real-time as I walked through campus, the invisible data collection barely noticeable anymore. The AI had already determined my aptitudes before I'd even chosen a field—literature reviews and research synthesis now happened while I slept."
+    "text": " No one questioned Maya’s top ranking; after all, the algorithm had calculated it from five years of neurodata and social behavior logs, but she still missed the satisfaction of writing her own ideas down."
   },
   {
     "id": "universal-university",
-    "text": "I adjusted my haptic gloves before entering the immersive lab simulation, connecting with classmates scattered across six continents. The physical campus, where I'd never actually set foot, existed primarily as a research hub and community anchor."
+    "text": " Lina didn’t think much of starting her degree from a fishing village in the Philippines, but when her VR lecture began with a simulated walk through ancient Athens, she realized the global classroom had truly arrived."
   },
   {
     "id": "extreme-unbundling",
-    "text": "My reputation score fluctuated as student reviews of my latest micro-lecture came in. Ten learning shots per day was barely enough to cover my basic expenses, unlike Professor Chen whose courses commanded premium prices on all major education platforms."
+    "text": " At 17, Ari had already completed 43 micro-courses, but still couldn’t explain to her grandfather what it all added up to—only that her reputation score kept climbing."
   },
   {
     "id": "justice-driven",
-    "text": "Our transdisciplinary team had just secured another community partnership focused on equitable water access. The university's transition from academic publisher to social change engine had transformed both our research methods and teaching philosophy."
+    "text": "Amira’s education began not in a classroom but in a city council meeting, where she helped redesign a local housing project as part of her university’s justice and governance challenge."
   },
   {
     "id": "ivory-tower",
-    "text": "The campus gates closed behind me as I crossed the historic quadrangle, acutely aware of my privilege. Only fifty students per year were admitted to this program, a stark contrast to the digital upskilling centers that served the majority of the population."
+    "text": "Elias passed the national screening exam with the highest score in a decade, earning a place at the gated Nova Collegium—one of the last true universities, reserved for society’s chosen few."
   },
   {
     "id": "ennui",
-    "text": "My lifelong learning subscription auto-renewed for another decade as my posthuman philosophy course began. With work obsolete and AIs managing production, understanding the purpose of human existence had become the central question of higher education."
+    "text": "With nothing left to automate, humans turned inward, and so Jonah enrolled in his tenth philosophy program- not to find a job, but to find meaning."
   },
   {
     "id": "enhancement",
-    "text": "I administered my focus enhancer before the exam, just like everyone else. The brain-computer interface tuned to my neural patterns, triggering the familiar sensation of heightened cognition—those who studied without augmentation were increasingly rare."
+    "text": "Every morning before class, Leila clipped on her neurostim headset and swallowed two focus pills— because in a campus built on metrics, natural thinking was a liability."
   }
 ];
 
@@ -44,3 +44,4 @@ export function getRandomWildcardStoryOpener(): WildcardStoryOpener {
   const randomIndex = Math.floor(Math.random() * wildcardStoryOpeners.length);
   return wildcardStoryOpeners[randomIndex];
 } 
+
