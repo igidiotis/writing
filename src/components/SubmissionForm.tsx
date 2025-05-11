@@ -15,24 +15,15 @@ const formSchema = z.object({
   insightfulness: z.enum(["none", "minimal", "significant", "transformative"]),
   plausibility: z.enum(["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"]),
   detailSpecificity: z.enum(["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"]),
-  priorExposure: z.enum([
-    "never-heard",
-    "heard-never-read",
-    "read-never-written",
-    "read-and-written"
-  ]),
-  motivation: z.enum([
-    "professional-interest",
-    "academic-requirement",
-    "personal-curiosity",
-    "other"
-  ]),
+  priorExposure: z.enum(["never-heard", "heard-never-read", "read-never-written", "read-and-written"]),
+  motivation: z.enum(["professional-interest", "academic-requirement", "personal-curiosity", "other"]),
   biggestSurprise: z.string().min(0),
   realWorldApplication: z.string().min(0),
   interestInOthers: z.enum(["yes", "no"]),
   willingnessToShare: z.enum(["yes", "no"]),
   additionalFeedback: z.string().min(0).max(500),
   email: z.string().email().optional().or(z.literal("")),
+  formCompletionTime: z.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -67,11 +58,9 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
   });
 
   const onFormSubmit = (data: FormValues) => {
-    // Add timing data
-    const _timeSpentMs = Date.now() - formStartTime.current;
     onSubmit({
       ...data,
-      // Attach any additional metadata about form completion timing if needed
+      formCompletionTime: Date.now()
     });
   };
 
@@ -89,15 +78,16 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
         </CardHeader>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <CardContent className="space-y-6">
+            {/* Ease of Use */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How easy was it to use the tool?
+                How easy was it to use the writing tool?
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {["very-difficult", "difficult", "neutral", "easy", "very-easy"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.easeOfUse ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -109,14 +99,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("easeOfUse")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "very-easy" && "😄"}
-                      {value === "easy" && "🙂"}
-                      {value === "neutral" && "😐"}
-                      {value === "difficult" && "🙁"}
-                      {value === "very-difficult" && "😞"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
+                    <span className="pointer-events-none">
                       {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
@@ -127,9 +110,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Mental Effort */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How much mental effort did you put into using the tool?
+                How much mental effort did you expend to complete your story?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["low", "medium", "high", "very-high"].map((value) => (
@@ -148,7 +132,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       {...register("mentalEffort")}
                     />
                     <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
                 ))}
@@ -158,9 +142,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Interruptions */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How often were you interrupted while using the tool?
+                During writing, how often did you have to pause and reread prompts or instructions?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["never", "occasionally", "often", "always"].map((value) => (
@@ -189,15 +174,16 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Perceived Learning */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How much did you learn from using the tool?
+                To what extent did this exercise help you explore new perspectives on education?
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["not-at-all", "a-little", "moderately", "a-great-deal"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.perceivedLearning ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -209,14 +195,8 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("perceivedLearning")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "a-great-deal" && "😄"}
-                      {value === "moderately" && "🙂"}
-                      {value === "a-little" && "😐"}
-                      {value === "not-at-all" && "🙁"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    <span className="pointer-events-none">
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
                 ))}
@@ -226,15 +206,16 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Insightfulness */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How insightful was the experience?
+                How much insight into real-world educational challenges did crafting your story provide?
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["none", "minimal", "significant", "transformative"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.insightfulness ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -246,13 +227,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("insightfulness")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "transformative" && "😄"}
-                      {value === "significant" && "🙂"}
-                      {value === "minimal" && "🙁"}
-                      {value === "none" && "😞"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
+                    <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
                     </span>
                   </label>
@@ -263,9 +238,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Plausibility */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How plausible was the scenario?
+                How believable is the future scenario you described? (Note: a scenario does not need to be plausible in order to spark thinking)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["not-at-all-plausible", "somewhat-plausible", "quite-plausible", "highly-plausible"].map((value) => (
@@ -284,7 +260,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       {...register("plausibility")}
                     />
                     <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
                 ))}
@@ -294,9 +270,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Detail & Specificity */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How detailed was the scenario?
+                How richly did you describe technologies, policies, and contexts in your story?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {["very-sparse", "some-detail", "rich-detail", "extremely-rich-detail"].map((value) => (
@@ -315,7 +292,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       {...register("detailSpecificity")}
                     />
                     <span className="pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                      {value.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                     </span>
                   </label>
                 ))}
@@ -325,15 +302,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Prior Exposure */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How much prior exposure did you have to the topic?
+                Before today, how familiar were you with the concept of educational fiction?
               </label>
-              <div className="flex flex-wrap gap-3">
-                {["never-heard", "heard-never-read", "read-never-written", "read-and-written"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {[
+                  { value: "never-heard", label: "I'd never heard of it" },
+                  { value: "heard-never-read", label: "I'd heard of it but never read or written it" },
+                  { value: "read-never-written", label: "I'd read some but never written it" },
+                  { value: "read-and-written", label: "I'd both read and written educational fiction" }
+                ].map(({ value, label }) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.priorExposure ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -345,15 +328,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("priorExposure")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "read-and-written" && "😄"}
-                      {value === "read-never-written" && "🙂"}
-                      {value === "heard-never-read" && "😐"}
-                      {value === "never-heard" && "🙁"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
+                    <span className="pointer-events-none">{label}</span>
                   </label>
                 ))}
               </div>
@@ -362,15 +337,21 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Motivation */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                What motivated you to use the tool?
+                What was your primary motivation for writing a story today?
               </label>
-              <div className="flex flex-wrap gap-3">
-                {["professional-interest", "academic-requirement", "personal-curiosity", "other"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: "professional-interest", label: "Professional interest" },
+                  { value: "academic-requirement", label: "Academic requirement" },
+                  { value: "personal-curiosity", label: "Personal curiosity" },
+                  { value: "other", label: "Other (please specify in comments)" }
+                ].map(({ value, label }) => (
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.motivation ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -382,15 +363,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("motivation")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "professional-interest" && "😄"}
-                      {value === "academic-requirement" && "🙂"}
-                      {value === "personal-curiosity" && "😄"}
-                      {value === "other" && "🤔"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </span>
+                    <span className="pointer-events-none">{label}</span>
                   </label>
                 ))}
               </div>
@@ -399,9 +372,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Biggest Surprise */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                What was the biggest surprise in the experience?
+                What element of your own story surprised you the most?
               </label>
               <textarea
                 className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
@@ -410,9 +384,10 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               />
             </div>
 
+            {/* Real-World Application */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                How would you apply this experience in the real world?
+                How might the ideas in your story inform real educational policy or practice?
               </label>
               <textarea
                 className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
@@ -421,15 +396,16 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               />
             </div>
 
+            {/* Interest in Others' Stories */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Are you interested in sharing this experience with others?
+                Would you be interested in reading future scenarios created by other participants?
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex gap-3">
                 {["yes", "no"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.interestInOthers ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -441,11 +417,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("interestInOthers")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "yes" && "😄"}
-                      {value === "no" && "🙁"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
+                    <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
                     </span>
                   </label>
@@ -456,15 +428,16 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Willingness to Share */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Are you willing to share this experience with others?
+                Would you share your story with colleagues or students?
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex gap-3">
                 {["yes", "no"].map((value) => (
-                  <label 
-                    key={value} 
-                    className={`relative flex flex-col items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
+                  <label
+                    key={value}
+                    className={`relative flex items-center p-3 border rounded-lg cursor-pointer transition-all duration-300
                     ${errors.willingnessToShare ? "border-red-300" : "border-muted"}
                     hover:bg-gradient-to-br hover:from-secondary/20 hover:to-secondary/40 hover:border-primary/30
                     [&:has(input:checked)]:bg-gradient-to-br [&:has(input:checked)]:from-primary/10 [&:has(input:checked)]:to-primary/20 
@@ -476,11 +449,7 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                       value={value}
                       {...register("willingnessToShare")}
                     />
-                    <div className="text-2xl mb-1 pointer-events-none">
-                      {value === "yes" && "😄"}
-                      {value === "no" && "🙁"}
-                    </div>
-                    <span className="text-xs pointer-events-none">
+                    <span className="pointer-events-none">
                       {value.charAt(0).toUpperCase() + value.slice(1)}
                     </span>
                   </label>
@@ -491,17 +460,19 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
               )}
             </div>
 
+            {/* Additional Feedback */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
-                Any other feedback? (Optional)
+                Additional Comments (Optional)
               </label>
               <textarea
                 className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:ring-2 focus:ring-primary/30 focus:outline-none"
-                placeholder="Share your thoughts..."
+                placeholder="Any other thoughts or feedback..."
                 {...register("additionalFeedback")}
               />
             </div>
 
+            {/* Email */}
             <div className="space-y-2">
               <label className="block text-sm font-medium mb-2">
                 Email (Optional)
@@ -512,6 +483,9 @@ export function SubmissionForm({ onSubmit, onCancel }: SubmissionFormProps) {
                 placeholder="name@example.com"
                 {...register("email")}
               />
+              <p className="text-sm text-muted-foreground mt-1">
+                Your email will only be used if you wish to participate in future research or receive updates about this project.
+              </p>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
