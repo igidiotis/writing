@@ -28,7 +28,7 @@ const interests = [
 const formSchema = z.object({
   workplace: z.string().min(1, "Please tell us where you work"),
   field: z.string().min(1, "Please tell us your field"),
-  interests: z.array(z.string()).min(1, "Please select at least one interest").max(3, "Please select at most three interests"),
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -59,9 +59,7 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
     const currentInterests = [...selectedInterests];
     
     if (checked) {
-      if (currentInterests.length < 3) {
-        setValue("interests", [...currentInterests, interest], { shouldValidate: true });
-      }
+      setValue("interests", [...currentInterests, interest], { shouldValidate: true });
     } else {
       setValue(
         "interests",
@@ -117,7 +115,7 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
 
             <div className="space-y-3">
               <Label className="text-lg">These aspects are important to me today:</Label>
-              <p className="text-sm text-muted-foreground">[Select up to three]</p>
+              <p className="text-sm text-muted-foreground">Select all that apply</p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {interests.map((interest) => (
@@ -130,10 +128,6 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
                           handleInterestChange(interest, checked);
                         }
                       }}
-                      disabled={
-                        !selectedInterests.includes(interest) && 
-                        selectedInterests.length >= 3
-                      }
                     />
                     <Label
                       htmlFor={interest}
