@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Editor } from "./components/Editor";
 import { RulePanel, type Rule } from "./components/RulePanel";
 import { SubmissionForm } from "./components/SubmissionForm";
+import { CheckInForm } from "./components/CheckInForm";
 import { Button } from "./components/ui/button";
 import { ToastProvider, useToast } from "./components/ui/toast";
 import { saveSession, saveSessionToLocalStorage, downloadSessionAsJson, type WritingSession } from "./lib/firebase";
@@ -97,6 +98,12 @@ function MainApp() {
   const [events, setEvents] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [isCheckedIn, setIsCheckedIn] = useState<boolean>(false);
+  const [checkInData, setCheckInData] = useState<{
+    workplace: string;
+    field: string;
+    interests: string[];
+  } | null>(null);
   
   // Calculate initial word count from saved content
   useEffect(() => {
@@ -167,6 +174,23 @@ function MainApp() {
     );
   };
   
+  // Handle check-in form submission
+  const handleCheckInSubmit = (data: {
+    workplace: string;
+    field: string;
+    interests: string[];
+  }) => {
+    setCheckInData(data);
+    setIsCheckedIn(true);
+    
+    // Track check-in event
+    handleTrackEvent({
+      type: 'check_in_complete',
+      timestamp: Date.now(),
+      checkInData: data
+    });
+  };
+  
   // Handle submit button click
   const handleSubmitClick = () => {
     // Check if all mandatory rules are completed
@@ -210,7 +234,8 @@ function MainApp() {
       feedback: {
         ...formData,
         formCompletionTime: Date.now()
-      }
+      },
+      ...(checkInData ? { checkIn: checkInData } : {}),
     };
     
     // Save to Firestore
@@ -273,6 +298,12 @@ function MainApp() {
           onSubmit={handleFormSubmit} 
           onCancel={handleCancelSubmit}
         />
+      );
+    }
+    
+    if (!isCheckedIn) {
+      return (
+        <CheckInForm onSubmit={handleCheckInSubmit} />
       );
     }
     

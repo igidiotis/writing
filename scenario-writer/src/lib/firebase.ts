@@ -46,6 +46,11 @@ export interface WritingSession {
     feedback?: string;
     formCompletionTime: number;
   };
+  checkIn?: {
+    workplace: string;
+    field: string;
+    interests: string[];
+  };
 }
 
 // Function to save a session to Firestore
@@ -78,17 +83,19 @@ export function saveSessionToLocalStorage(session: WritingSession): void {
   }
 }
 
-// Download session as JSON file
+// Function to download session as JSON file
 export function downloadSessionAsJson(session: WritingSession): void {
   try {
     const dataStr = JSON.stringify(session, null, 2);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
     
+    const exportFileDefaultName = `scenario_${session.sessionId}.json`;
+    
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', `scenario_session_${session.sessionId}.json`);
+    linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
   } catch (error) {
-    console.error("Error downloading session:", error);
+    console.error("Error generating download:", error);
   }
 } 
