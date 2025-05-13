@@ -95,7 +95,7 @@ export function CheckInForm({ onSubmit }: CheckInFormProps) {
             
             <div className="space-y-3">
               <div className="text-lg">
-                I work at <Input 
+                I work for <Input 
                   {...register("workplace")} 
                   placeholder="the type of your workplace" 
                   className="inline-block w-64 mx-2"
