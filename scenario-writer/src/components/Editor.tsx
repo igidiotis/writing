@@ -50,12 +50,14 @@ export function Editor({
   const wildcardTimeoutRef = useRef<number | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
   
-  // Initialize with initialContent when it changes
+  // Initialize with initialContent only on mount
   useEffect(() => {
     if (initialContent) {
       setContent(initialContent);
     }
-  }, [initialContent]);
+    // Only run on mount!
+    // eslint-disable-next-line
+  }, []);
   
   // Track word count
   useEffect(() => {
