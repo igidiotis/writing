@@ -27,6 +27,7 @@ export interface EditorProps {
   wordCount: number;
   startTime: number;
   onRuleInteraction: (ruleId: string, action: 'complete' | 'skip') => void;
+  sessionId: string;
 }
 
 export function Editor({ 
@@ -36,7 +37,8 @@ export function Editor({
   rules,
   wordCount,
   startTime,
-  onRuleInteraction
+  onRuleInteraction,
+  sessionId
 }: EditorProps) {
   const [content, setContent] = useState(initialContent);
   const [consentOpen, setConsentOpen] = useState(false);
@@ -77,6 +79,14 @@ export function Editor({
       }
     };
   }, [content, wildcardShown]);
+
+  // Restore draft from localStorage on mount if available
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('draft_' + sessionId);
+    if (savedDraft && !content) {
+      setContent(savedDraft);
+    }
+  }, [sessionId]);
 
   // Track user events
   const trackEvent = (type: EditorEvent['type'], additionalData = {}) => {

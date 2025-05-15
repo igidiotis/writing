@@ -317,6 +317,7 @@ function MainApp() {
           wordCount={wordCount}
           startTime={startTimeRef.current}
           onRuleInteraction={handleRuleInteraction}
+          sessionId={sessionId}
         />
         
         <motion.div
