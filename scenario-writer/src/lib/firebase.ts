@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, Timestamp, setDoc, doc } from "firebase/firestore";
 
 // Initialize Firebase - Replace with your own Firebase config
 // These should ideally be in .env files
@@ -56,19 +56,17 @@ export interface WritingSession {
 // Function to save a session to Firestore
 export async function saveSession(session: WritingSession): Promise<string> {
   try {
-    const docRef = await addDoc(collection(db, "sessions"), {
+    const docRef = doc(db, "sessions", session.sessionId);
+    await setDoc(docRef, {
       ...session,
       createdAt: Timestamp.now(),
     });
-    
-    return docRef.id;
+    return session.sessionId;
   } catch (error) {
     console.error("Error saving session to Firestore:", error);
-    
     // Fallback: Save to localStorage
     const key = `session_${session.sessionId}`;
     localStorage.setItem(key, JSON.stringify(session));
-    
     throw error;
   }
 }

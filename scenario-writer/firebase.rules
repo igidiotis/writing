@@ -11,8 +11,9 @@ service cloud.firestore {
       // In a real app, this would be tied to authentication
       allow read: if true;
       
-      // Prevent modification after creation
-      allow update, delete: if false;
+      // Allow update only for the same sessionId (overwrite by owner)
+      allow update: if request.resource.id == sessionId;
+      allow delete: if false;
     }
   }
 } 
